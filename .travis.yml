@@ -1,9 +1,13 @@
 language: go
 
 go:
-  - "1.13.x"
+  - "1.11.x"
+  - "1.12.x"
 
-install:
+env:
+  - GO111MODULE=on GOFLAGS=-mod=readonly
+
+install: true
 
 script:
     - go test -v ./...
