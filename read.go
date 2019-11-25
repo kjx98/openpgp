@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 // Package openpgp implements high level operations on OpenPGP messages.
-package openpgp // import "golang.org/x/crypto/openpgp"
+package openpgp // import "github.com/kjx98/openpgp"
 
 import (
 	"crypto"
@@ -12,9 +12,9 @@ import (
 	"io"
 	"strconv"
 
-	"golang.org/x/crypto/openpgp/armor"
-	"golang.org/x/crypto/openpgp/errors"
-	"golang.org/x/crypto/openpgp/packet"
+	"github.com/kjx98/openpgp/armor"
+	"github.com/kjx98/openpgp/errors"
+	"github.com/kjx98/openpgp/packet"
 )
 
 // SignatureType is the armor type for a PGP signature.
@@ -409,7 +409,7 @@ func CheckDetachedSignatureAndHash(keyring KeyRing, signed, signature io.Reader,
 			if hashFunc == expectedHash {
 				break
 			}
-			if i + 1 == expectedHashesLen {
+			if i+1 == expectedHashesLen {
 				return nil, errors.StructuralError("hash algorithm mismatch with cleartext message headers")
 			}
 		}

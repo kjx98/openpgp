@@ -10,11 +10,11 @@ import (
 	"math/big"
 	"strconv"
 
-	"golang.org/x/crypto/openpgp/ecdh"
-	"golang.org/x/crypto/openpgp/elgamal"
-	"golang.org/x/crypto/openpgp/errors"
-	"golang.org/x/crypto/openpgp/internal/encoding"
-	"golang.org/x/crypto/rsa"
+	"crypto/rsa"
+	"github.com/kjx98/openpgp/ecdh"
+	"github.com/kjx98/openpgp/elgamal"
+	"github.com/kjx98/openpgp/errors"
+	"github.com/kjx98/openpgp/internal/encoding"
 )
 
 const encryptedKeyVersion = 3

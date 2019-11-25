@@ -5,9 +5,9 @@ package integrationtests
 import (
 	"bytes"
 	"encoding/json"
-	"golang.org/x/crypto/openpgp"
-	"golang.org/x/crypto/openpgp/armor"
-	"golang.org/x/crypto/openpgp/packet"
+	"github.com/kjx98/openpgp"
+	"github.com/kjx98/openpgp/armor"
+	"github.com/kjx98/openpgp/packet"
 	"io"
 	"io/ioutil"
 	"os"

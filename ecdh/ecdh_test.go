@@ -11,14 +11,13 @@ import (
 	_ "crypto/sha512"
 	"testing"
 
-	"golang.org/x/crypto/openpgp/internal/algorithm"
+	"github.com/kjx98/openpgp/internal/algorithm"
 )
 
 var (
 	testCurveOID    = []byte{0x05, 0x2B, 0x81, 0x04, 0x00, 0x22} // MPI encoded oidCurveP384
 	testFingerprint = make([]byte, 20)
 )
-
 
 // TODO: Improve this.
 func TestEncryptDecrypt(t *testing.T) {

@@ -5,14 +5,14 @@
 package openpgp
 
 import (
-	"math/big"
+	//"math/big"
 
+	"crypto/rsa"
+	"github.com/kjx98/openpgp/ecdh"
+	"github.com/kjx98/openpgp/errors"
+	"github.com/kjx98/openpgp/internal/algorithm"
+	"github.com/kjx98/openpgp/packet"
 	"golang.org/x/crypto/ed25519"
-	"golang.org/x/crypto/openpgp/ecdh"
-	"golang.org/x/crypto/openpgp/errors"
-	"golang.org/x/crypto/openpgp/internal/algorithm"
-	"golang.org/x/crypto/openpgp/packet"
-	"golang.org/x/crypto/rsa"
 )
 
 const defaultRSAKeyBits = 2048
@@ -48,12 +48,7 @@ func NewEntity(name, comment, email string, config *packet.Config) (*Entity, err
 			bits = config.RSABits
 		}
 
-		var primaryPrimes []*big.Int
-		if config != nil && len(config.RSAPrimes) >= 2 {
-			primaryPrimes = config.RSAPrimes[0:2]
-		}
-
-		primaryKey, err := rsa.GenerateKeyWithPrimes(config.Random(), bits, primaryPrimes)
+		primaryKey, err := rsa.GenerateKey(config.Random(), bits)
 		if err != nil {
 			return nil, err
 		}
@@ -61,12 +56,7 @@ func NewEntity(name, comment, email string, config *packet.Config) (*Entity, err
 		privPrimary = packet.NewRSAPrivateKey(creationTime, primaryKey)
 		pubPrimary = packet.NewRSAPublicKey(creationTime, &primaryKey.PublicKey)
 
-		var subkeyPrimes []*big.Int
-		if config != nil && len(config.RSAPrimes) >= 4 {
-			subkeyPrimes = config.RSAPrimes[2:4]
-		}
-
-		subkey, err := rsa.GenerateKeyWithPrimes(config.Random(), bits, subkeyPrimes)
+		subkey, err := rsa.GenerateKey(config.Random(), bits)
 		if err != nil {
 			return nil, err
 		}

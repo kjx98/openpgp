@@ -9,7 +9,7 @@ import (
 	"io"
 	"testing"
 
-	"golang.org/x/crypto/openpgp/errors"
+	"github.com/kjx98/openpgp/errors"
 )
 
 var oidTests = []struct {

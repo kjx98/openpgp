@@ -11,9 +11,9 @@ import (
 	"io"
 	"math/big"
 
+	"github.com/kjx98/openpgp/aes/keywrap"
+	"github.com/kjx98/openpgp/internal/ecc"
 	"golang.org/x/crypto/curve25519"
-	"golang.org/x/crypto/openpgp/aes/keywrap"
-	"golang.org/x/crypto/openpgp/internal/ecc"
 )
 
 // Generates a private-public key-pair.

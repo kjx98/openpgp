@@ -17,8 +17,8 @@ import (
 	"testing"
 	"time"
 
-	"golang.org/x/crypto/ed25519"
-	"golang.org/x/crypto/rsa"
+	"crypto/ed25519"
+	"crypto/rsa"
 )
 
 var privateKeyTests = []struct {
@@ -134,7 +134,7 @@ func TestRSAPrivateKey(t *testing.T) {
 			E: rsaPriv.PublicKey.E,
 			N: rsaPriv.PublicKey.N,
 		},
-		D: rsaPriv.D,
+		D:      rsaPriv.D,
 		Primes: rsaPriv.Primes,
 	}
 	xrsaPriv.Precompute()

@@ -18,13 +18,13 @@ import (
 	"strconv"
 	"time"
 
+	"crypto/rsa"
+	"github.com/kjx98/openpgp/ecdh"
+	"github.com/kjx98/openpgp/elgamal"
+	"github.com/kjx98/openpgp/errors"
+	"github.com/kjx98/openpgp/internal/encoding"
+	"github.com/kjx98/openpgp/s2k"
 	"golang.org/x/crypto/ed25519"
-	"golang.org/x/crypto/openpgp/ecdh"
-	"golang.org/x/crypto/openpgp/elgamal"
-	"golang.org/x/crypto/openpgp/errors"
-	"golang.org/x/crypto/openpgp/internal/encoding"
-	"golang.org/x/crypto/openpgp/s2k"
-	"golang.org/x/crypto/rsa"
 )
 
 // PrivateKey represents a possibly encrypted private key. See RFC 4880,
@@ -317,8 +317,6 @@ func serializeECDHPrivateKey(w io.Writer, priv *ecdh.PrivateKey) error {
 	_, err := w.Write(encoding.NewMPI(priv.D).EncodedBytes())
 	return err
 }
-
-
 
 // Decrypt decrypts an encrypted private key using a passphrase.
 func (pk *PrivateKey) Decrypt(passphrase []byte) error {

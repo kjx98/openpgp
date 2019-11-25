@@ -20,14 +20,14 @@ import (
 	"strconv"
 	"time"
 
-	"golang.org/x/crypto/ed25519"
-	"golang.org/x/crypto/openpgp/ecdh"
-	"golang.org/x/crypto/openpgp/elgamal"
-	"golang.org/x/crypto/openpgp/errors"
-	"golang.org/x/crypto/openpgp/internal/algorithm"
-	"golang.org/x/crypto/openpgp/internal/ecc"
-	"golang.org/x/crypto/openpgp/internal/encoding"
-	"golang.org/x/crypto/rsa"
+	"crypto/ed25519"
+	"crypto/rsa"
+	"github.com/kjx98/openpgp/ecdh"
+	"github.com/kjx98/openpgp/elgamal"
+	"github.com/kjx98/openpgp/errors"
+	"github.com/kjx98/openpgp/internal/algorithm"
+	"github.com/kjx98/openpgp/internal/ecc"
+	"github.com/kjx98/openpgp/internal/encoding"
 )
 
 type kdfHashFunction byte
@@ -126,14 +126,14 @@ func NewECDSAPublicKey(creationTime time.Time, pub *ecdsa.PublicKey) *PublicKey 
 func NewECDHPublicKey(creationTime time.Time, pub *ecdh.PublicKey) *PublicKey {
 	var pk *PublicKey
 	var curveInfo *ecc.CurveInfo
-	var kdf = encoding.NewOID([]byte{ 0x1, pub.Hash.Id(), pub.Cipher.Id() })
+	var kdf = encoding.NewOID([]byte{0x1, pub.Hash.Id(), pub.Cipher.Id()})
 	if pub.CurveType == ecc.Curve25519 {
 		pk = &PublicKey{
 			CreationTime: creationTime,
 			PubKeyAlgo:   PubKeyAlgoECDH,
 			PublicKey:    pub,
 			p:            encoding.NewMPI(pub.X.Bytes()),
-			kdf: kdf,
+			kdf:          kdf,
 		}
 		curveInfo = ecc.FindByName("Curve25519")
 	} else {
@@ -142,7 +142,7 @@ func NewECDHPublicKey(creationTime time.Time, pub *ecdh.PublicKey) *PublicKey {
 			PubKeyAlgo:   PubKeyAlgoECDH,
 			PublicKey:    pub,
 			p:            encoding.NewMPI(elliptic.Marshal(pub.Curve, pub.X, pub.Y)),
-			kdf: kdf,
+			kdf:          kdf,
 		}
 		curveInfo = ecc.FindByCurve(pub.Curve)
 	}
@@ -345,7 +345,7 @@ func (pk *PublicKey) parseECDH(r io.Reader) (err error) {
 	c := curveInfo.Curve
 	cType := curveInfo.CurveType
 
-	var x, y *big.Int;
+	var x, y *big.Int
 	if cType == ecc.Curve25519 {
 		x = new(big.Int)
 		x.SetBytes(pk.p.Bytes())
@@ -373,9 +373,9 @@ func (pk *PublicKey) parseECDH(r io.Reader) (err error) {
 
 	pk.PublicKey = &ecdh.PublicKey{
 		CurveType: cType,
-		Curve: c,
-		X:     x,
-		Y:     y,
+		Curve:     c,
+		X:         x,
+		Y:         y,
 		KDF: ecdh.KDF{
 			Hash:   kdfHash,
 			Cipher: kdfCipher,

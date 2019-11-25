@@ -1,17 +1,16 @@
 package integrationtests
 
 import (
-	"time"
 	"bytes"
 	"crypto"
 	"crypto/rand"
-	"golang.org/x/crypto/openpgp"
-	"golang.org/x/crypto/openpgp/armor"
-	"golang.org/x/crypto/openpgp/packet"
+	"github.com/kjx98/openpgp"
+	"github.com/kjx98/openpgp/armor"
+	"github.com/kjx98/openpgp/packet"
 	mathrand "math/rand"
 	"strings"
+	"time"
 )
-
 
 // This function produces random test vectors: generates keys according to the
 // given settings, associates a random message for each key. It returns the
@@ -24,8 +23,8 @@ func generateFreshTestVectors() (vectors []testVector, err error) {
 		name, email, comment, password, message := randEntityData()
 
 		// Only for verbose display
-		pkAlgoNames := map[packet.PublicKeyAlgorithm]string {
-			packet.PubKeyAlgoRSA: "rsa_fresh",
+		pkAlgoNames := map[packet.PublicKeyAlgorithm]string{
+			packet.PubKeyAlgoRSA:   "rsa_fresh",
 			packet.PubKeyAlgoEdDSA: "ed25519_fresh",
 		}
 
@@ -209,19 +208,18 @@ func randConfig() *packet.Config {
 	}
 	ciph := ciphers[mathrand.Intn(len(ciphers))]
 
-	compAlgos := []packet.CompressionAlgo {
+	compAlgos := []packet.CompressionAlgo{
 		packet.CompressionNone,
 		packet.CompressionZIP,
 		packet.CompressionZLIB,
 	}
 	compAlgo := compAlgos[mathrand.Intn(len(compAlgos))]
 
-	pkAlgos := []packet.PublicKeyAlgorithm {
+	pkAlgos := []packet.PublicKeyAlgorithm{
 		packet.PubKeyAlgoRSA,
 		packet.PubKeyAlgoEdDSA,
 	}
 	pkAlgo := pkAlgos[mathrand.Intn(len(pkAlgos))]
-
 
 	var rsaBits int
 	if pkAlgo == packet.PubKeyAlgoRSA {
@@ -237,18 +235,18 @@ func randConfig() *packet.Config {
 		}
 	}
 
-	level := mathrand.Intn(11)-1
+	level := mathrand.Intn(11) - 1
 	compConf := &packet.CompressionConfig{level}
 
 	// Define AEAD mode when it's implemented
 	return &packet.Config{
-		Rand: rand.Reader,
-		DefaultHash: hash,
-		DefaultCipher: ciph,
+		Rand:                   rand.Reader,
+		DefaultHash:            hash,
+		DefaultCipher:          ciph,
 		DefaultCompressionAlgo: compAlgo,
-		CompressionConfig: compConf,
-		S2KCount: 1024 + mathrand.Intn(65010689),
-		RSABits: rsaBits,
-		Algorithm: pkAlgo,
+		CompressionConfig:      compConf,
+		S2KCount:               1024 + mathrand.Intn(65010689),
+		RSABits:                rsaBits,
+		Algorithm:              pkAlgo,
 	}
 }
