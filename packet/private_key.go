@@ -18,13 +18,13 @@ import (
 	"strconv"
 	"time"
 
+	"crypto/ed25519"
 	"crypto/rsa"
 	"github.com/kjx98/openpgp/ecdh"
 	"github.com/kjx98/openpgp/elgamal"
 	"github.com/kjx98/openpgp/errors"
 	"github.com/kjx98/openpgp/internal/encoding"
 	"github.com/kjx98/openpgp/s2k"
-	"golang.org/x/crypto/ed25519"
 )
 
 // PrivateKey represents a possibly encrypted private key. See RFC 4880,

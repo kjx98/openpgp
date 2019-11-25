@@ -4,8 +4,6 @@ go:
   - "1.12.x"
 
 install:
-  - go get -u golang.org/x/crypto
-  - go get -u github.com/kjx98/crypto
 
 script:
     - go test -v ./...

@@ -1,0 +1,7 @@
+github.com/golang/crypto v0.0.0-20190513172903-22d7a77e9e5f h1:8doyZ7ehohg553SQEtjvHRMp17Emd5ASyTEh1XFy7iM=
+github.com/golang/crypto v0.0.0-20190513172903-22d7a77e9e5f/go.mod h1:yigFU9vqHzYiE8UmvKecakEJjdnWj3jj499lnFckfCI=
+github.com/golang/net v0.0.0-20190404232315-eb5bcb51f2a3/go.mod h1:t9HGtf8HONx5eT2rtn7q6eTqICYqUVnKs3thJo3Qplg=
+github.com/golang/sys v0.0.0-20190412213103-97732733099d/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
+github.com/golang/text v0.3.0/go.mod h1:GUiq9pdJKRKKAZXiVgWFEvocYuREvC14NhI4OPgEjeE=
+github.com/kjx98/crypto v0.0.0-20191124041549-d5e3a4ab447c h1:ks2shSfiu3QXE5YDI9DBV+WnYFHHCMHlwDAMlsPnse0=
+github.com/kjx98/crypto v0.0.0-20191124041549-d5e3a4ab447c/go.mod h1:hOj/FrJu2/RaYoy/hWckpQ1dW+PIQUkLfTBF5KZPPrU=
