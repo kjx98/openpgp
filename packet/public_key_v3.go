@@ -7,6 +7,7 @@ package packet
 import (
 	"crypto"
 	"crypto/md5"
+	"crypto/rsa"
 	"encoding/binary"
 	"fmt"
 	"hash"
@@ -15,7 +16,6 @@ import (
 	"strconv"
 	"time"
 
-	"crypto/rsa"
 	"github.com/kjx98/openpgp/errors"
 	"github.com/kjx98/openpgp/internal/encoding"
 )

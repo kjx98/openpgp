@@ -11,6 +11,7 @@ import (
 	"crypto/dsa"
 	"crypto/ecdsa"
 	"crypto/rand"
+	"crypto/rsa"
 	"crypto/sha1"
 	"io"
 	"io/ioutil"
@@ -18,7 +19,6 @@ import (
 	"strconv"
 	"time"
 
-	"crypto/rsa"
 	"github.com/kjx98/openpgp/ecdh"
 	"github.com/kjx98/openpgp/elgamal"
 	"github.com/kjx98/openpgp/errors"

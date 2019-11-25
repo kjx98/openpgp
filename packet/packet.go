@@ -458,6 +458,25 @@ func (pka PublicKeyAlgorithm) CanSign() bool {
 	return false
 }
 
+// return Algorithm Name of publicKey Algorithm
+func (pka PublicKeyAlgorithm) String() string {
+	switch pka {
+	case PubKeyAlgoRSA, PubKeyAlgoRSASignOnly, PubKeyAlgoRSAEncryptOnly:
+		return "RSA"
+	case PubKeyAlgoElGamal:
+		return "ElGamal"
+	case PubKeyAlgoDSA:
+		return "DSA"
+	case PubKeyAlgoECDSA:
+		return "ECDSA"
+	case PubKeyAlgoEdDSA:
+		return "EdDSA"
+	case PubKeyAlgoECDH:
+		return "ECDH"
+	}
+	return ""
+}
+
 // CipherFunction represents the different block ciphers specified for OpenPGP. See
 // http://www.iana.org/assignments/pgp-parameters/pgp-parameters.xhtml#pgp-parameters-13
 type CipherFunction algorithm.CipherFunction

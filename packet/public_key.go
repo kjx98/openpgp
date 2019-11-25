@@ -9,6 +9,7 @@ import (
 	"crypto/dsa"
 	"crypto/ecdsa"
 	"crypto/elliptic"
+	"crypto/rsa"
 	"crypto/sha1"
 	_ "crypto/sha256"
 	_ "crypto/sha512"
@@ -20,7 +21,6 @@ import (
 	"strconv"
 	"time"
 
-	"crypto/rsa"
 	"github.com/kjx98/openpgp/ecdh"
 	"github.com/kjx98/openpgp/elgamal"
 	"github.com/kjx98/openpgp/errors"

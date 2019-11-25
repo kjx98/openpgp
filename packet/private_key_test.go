@@ -10,6 +10,7 @@ import (
 	"crypto/ecdsa"
 	"crypto/elliptic"
 	"crypto/rand"
+	"crypto/rsa"
 	"crypto/x509"
 	"encoding/hex"
 	"hash"
@@ -17,7 +18,6 @@ import (
 	"testing"
 	"time"
 
-	"crypto/rsa"
 	"golang.org/x/crypto/ed25519"
 )
 
