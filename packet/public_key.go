@@ -20,7 +20,6 @@ import (
 	"strconv"
 	"time"
 
-	"crypto/ed25519"
 	"crypto/rsa"
 	"github.com/kjx98/openpgp/ecdh"
 	"github.com/kjx98/openpgp/elgamal"
@@ -28,6 +27,7 @@ import (
 	"github.com/kjx98/openpgp/internal/algorithm"
 	"github.com/kjx98/openpgp/internal/ecc"
 	"github.com/kjx98/openpgp/internal/encoding"
+	"golang.org/x/crypto/ed25519"
 )
 
 type kdfHashFunction byte

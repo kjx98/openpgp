@@ -17,8 +17,8 @@ import (
 	"testing"
 	"time"
 
-	"crypto/ed25519"
 	"crypto/rsa"
+	"golang.org/x/crypto/ed25519"
 )
 
 var privateKeyTests = []struct {
