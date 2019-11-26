@@ -3,8 +3,8 @@ package ecc
 import (
 	"bytes"
 	"crypto/elliptic"
-	"github.com/kjx98/crypto/bitcurves"
-	"github.com/kjx98/crypto/brainpool"
+	"github.com/kjx98/openpgp/internal/bitcurves"
+	"github.com/kjx98/openpgp/internal/brainpool"
 	"github.com/kjx98/openpgp/internal/encoding"
 )
 
