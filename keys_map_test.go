@@ -32,6 +32,8 @@ func dumpKeys(keys []Key) {
 	}
 }
 
+var eckeyId uint64 = 0x11E6F3B8AFCB2F76
+var edkeyId uint64 = 0xf58f7e0a27b3228
 var enText string = `
 -----BEGIN PGP MESSAGE-----
 
@@ -43,11 +45,29 @@ krSe229jmDAWFJmbXW/F77ZzPpbDbkc7sDrEK4yDqA==
 =Xn0A
 -----END PGP MESSAGE-----
 `
+var enSignText string = `
+-----BEGIN PGP MESSAGE-----
+
+hF4DEebzuK/LL3YSAQdAu6mXSOY2yfemj2bVWeCj+CDKc3pm02WSxSIDE1Ez8T0w
+/JxVNolOfynq5BIu4Uvl/n43MIYnIUeyIVZrHa6tfku3bYQTBXbWIpaYomjbfQKo
+0ukBBSyycvyQWgAICxqPmxWkSfCSAIAoZsGIuc8FfZoJAOd8qjF8WKIxl03YYYdz
+jW88bVirfpyWR+xqndD+YbI1Oycxe+9nBDV4QbXuTYaOdOUjNFKavGGeVpHNNP0r
+YJOVm9waVGNK5WcpzhQzbwwj4K6dXs2eUsZBQJvYzMEn+8TFpl1etwYG962aBaZH
+iw19cTTrcXIEJY4eeVGzDkvv04vrEqs3BGD97l8JAEp79XsSG7RZF+D5r0Kz8X1/
+G51J4M1t26ISoZ+qGg/iTf1iAxYB/Sat1Hln3HQywqi7MZ3bQXWYeb/wlRaVzee+
+uIvOQdh50YpOg4WM3V9kxMq76wXXjpBqIw+rfQruWFv7fyG8wqTmxtkzZIGhW59q
+kMV8DatVk6PNdZb7wdzPI8p1fvPTOyaMxOopTrgyMiyVsCRVFc9ph0+ZfpwpFW2/
+HOMX5zJHG/TZCHTFfrs6R22fEhfj/Fr1dcKcmikWt4xd9MfZy55iz4OkMXZu/FCm
+7lasRtdACuXaETi/Zpfkz7yvvXBi3mHMwYtvE9Pv/H9E6Pnkj8mfxWvVivvUFcHY
+WQIXLJLPyrYg+xStDgwPv4JHKiDXAB9ZhB2TmLlNq5EeqvNDT/l5VUb9rr8vyObl
+rU2gKOm23FyGO2+Skt9m80QN1timepD0mwdpRMQhW8Ou8iOvYh+SdWQanMfhaDIS
+oa5fsBTRNVGVIUlk8bp+cEtLQiUVUA==
+=7uiL
+-----END PGP MESSAGE-----
+`
 
 func TestGetKeyMaps(t *testing.T) {
 	kring := GetKeyMaps()
-	var eckeyId uint64 = 0x11E6F3B8AFCB2F76
-	var edkeyId uint64 = 0xAE9E177E5DE31B10
 	fmt.Println("keyMap size:", len(kring))
 	fmt.Println("List keyMap")
 	for _, keys := range kring {
@@ -101,7 +121,8 @@ func TestReadEd25519Msg(t *testing.T) {
 		return nil, nil
 	}
 	kring := GetKeyMaps()
-	sig, err := armor.Decode(strings.NewReader(enText))
+	t.Log("Test Decode Signed Message")
+	sig, err := armor.Decode(strings.NewReader(enSignText))
 	if err != nil {
 		t.Error(err)
 		return
@@ -111,6 +132,9 @@ func TestReadEd25519Msg(t *testing.T) {
 		t.Error(err)
 		return
 	}
+	if !md.IsSigned || md.SignedByKeyId != edkeyId || md.SignedBy == nil || !md.IsEncrypted || md.IsSymmetricallyEncrypted {
+		t.Errorf("bad MessageDetails: %#v", md)
+	}
 	contents, err := ioutil.ReadAll(md.UnverifiedBody)
 	if err != nil {
 		t.Errorf("error reading UnverifiedBody: %s", err)
@@ -119,5 +143,7 @@ func TestReadEd25519Msg(t *testing.T) {
 	if string(contents) != expected {
 		t.Errorf("bad UnverifiedBody got:%s want:%s", string(contents), expected)
 	}
-
+	if md.SignatureError != nil || md.Signature == nil {
+		t.Errorf("failed to validate: %s", md.SignatureError)
+	}
 }
