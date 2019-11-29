@@ -39,24 +39,30 @@ func upsetMap(kd Key) {
 	keyMaps[kId] = keys
 }
 
-func getKeyRing(ringName string) (EntityList, error) {
-	homeDir := os.Getenv("HOME")
+func getKeyRing(ringName string, bArmor bool) (EntityList, error) {
 	if ringName == "" {
 		ringName = "pubring.gpg"
 	}
-	if ff, err := os.Open(homeDir + "/.gnupg/" + ringName); err != nil {
+	if ringName[0] != '/' && ringName[:2] != "./" {
+		homeDir := os.Getenv("HOME")
+		ringName = homeDir + "/.gnupg/" + ringName
+	}
+	if ff, err := os.Open(ringName); err != nil {
 		return nil, err
 	} else {
 		defer ff.Close()
+		if bArmor {
+			return ReadArmoredKeyRing(ff)
+		}
 		return ReadKeyRing(ff)
 	}
 }
 
 func init() {
-	if kr, err := getKeyRing(""); err == nil {
+	if kr, err := getKeyRing("", false); err == nil {
 		mapAddKeyRing(kr)
 	}
-	if kr, err := getKeyRing("expring.pgp"); err == nil {
+	if kr, err := getKeyRing("./expring.asc", true); err == nil {
 		mapAddKeyRing(kr)
 	}
 }
