@@ -19,15 +19,6 @@ func dumpKeys(keys []Key) {
 		}
 		if ee.PrivateKey != nil {
 			fmt.Println("Private Encrypted:", ee.PrivateKey.Encrypted)
-			if ee.PrivateKey.Encrypted {
-				// TODO: console get passphrase
-				passphrase := "testme"
-				if err := ee.PrivateKey.Decrypt([]byte(passphrase)); err == nil {
-					fmt.Println("Passphrase ok")
-				} else {
-					fmt.Println("Invalid passphrase", err)
-				}
-			}
 		}
 	}
 }
@@ -95,6 +86,32 @@ func TestGetKeyMaps(t *testing.T) {
 }
 
 func TestReadEd25519Msg(t *testing.T) {
+	kring := GetKeyMaps()
+	t.Log("Test Decode Message")
+	if _, err := UnlockPrivate(eckeyId, "testme"); err != nil {
+		t.Error(err)
+	}
+	sig, err := armor.Decode(strings.NewReader(enText))
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	md, err := ReadMessage(sig.Body, kring, nil, nil)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	contents, err := ioutil.ReadAll(md.UnverifiedBody)
+	if err != nil {
+		t.Errorf("error reading UnverifiedBody: %s", err)
+	}
+	expected := "Hello World!\n"
+	if string(contents) != expected {
+		t.Errorf("bad UnverifiedBody got:%s want:%s", string(contents), expected)
+	}
+}
+
+func TestReadEd25519SignedMsg(t *testing.T) {
 	prompt := func(keys []Key, symmetric bool) ([]byte, error) {
 		if symmetric {
 			t.Errorf("prompt: message was marked as symmetrically encrypted")
@@ -137,7 +154,25 @@ func TestReadEd25519Msg(t *testing.T) {
 	if string(contents) != expected {
 		t.Errorf("bad UnverifiedBody got:%s want:%s", string(contents), expected)
 	}
-	if md.SignatureError != nil || md.Signature == nil {
+	if md.Signature == nil {
+		t.Error("failed to validate: no Signature")
+	}
+	if md.SignatureError != nil {
 		t.Errorf("failed to validate: %s", md.SignatureError)
+	}
+}
+
+func BenchmarkDecrypt25519(b *testing.B) {
+	kring := GetKeyMaps()
+	for i := 0; i < b.N; i++ {
+		sig, err := armor.Decode(strings.NewReader(enText))
+		if err != nil {
+			return
+		}
+		md, err := ReadMessage(sig.Body, kring, nil, nil)
+		if err != nil {
+			return
+		}
+		_, err = ioutil.ReadAll(md.UnverifiedBody)
 	}
 }

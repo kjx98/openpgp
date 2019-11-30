@@ -8,6 +8,7 @@ package openpgp
 import (
 	"os"
 
+	"github.com/kjx98/openpgp/errors"
 	"github.com/kjx98/openpgp/packet"
 )
 
@@ -19,6 +20,25 @@ var privKeys []Key = []Key{}
 
 func GetKeyMaps() (keyring EntityMap) {
 	return keyMaps
+}
+
+func UnlockPrivate(kId uint64, passPhrase string) (uint64, error) {
+	if keys, ok := keyMaps[kId]; !ok {
+		return 0, errors.ErrKeyIncorrect
+	} else {
+		for _, key := range keys {
+			if key.PrivateKey != nil {
+				if !key.PrivateKey.Encrypted {
+					return kId, nil
+				}
+				if err := key.PrivateKey.Decrypt([]byte(passPhrase)); err != nil {
+					return 0, err
+				}
+				return kId, nil
+			}
+		}
+	}
+	return 0, errors.InvalidArgumentError("only Public key")
 }
 
 func upsetMap(kd Key) {
