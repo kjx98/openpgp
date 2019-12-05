@@ -5,7 +5,6 @@ package openpgp
 import (
 	"fmt"
 	"github.com/kjx98/openpgp/armor"
-	"github.com/kjx98/openpgp/errors"
 	"io/ioutil"
 	"strings"
 	"testing"
@@ -48,6 +47,17 @@ l3/MZrIo6/uOnlMMgQN2IcmWqtSA2PrByFi1EC0pkl1gr2Z3KJ1VMfmJFU3LCqpt
 wHm9Ee4PLoh0tbWGKC+7x6SapvfJIxSErzepI/GMiMqjjngreDt2bjam2X0an+OX
 1uZ/9c7Jk7Lm/L9kzTme3ISD7Xqs9NTMSck73k/JN1YvqSQZPJHXDw==
 =TEaV
+-----END PGP MESSAGE-----
+`
+var signText string = `
+-----BEGIN PGP MESSAGE-----
+
+owNCWmg5MUFZJlNZbffW0AAAN3////rRvnPNMHwQRBKrFx2e0SDUQANzJQAKiJng
+KguhsBkgAJIYgAAAAAAAAAAAAMhoGgGmmnqeiGEaNNA0GgBpoAAAANAAGhoaaAAG
+g0I96QVITqWp1lhuHO8gMhhwkvwvMQAzC+iOhzATn/gGMJdW1yvyB1isHiQpedeG
+yb3NjayqR9VZuGFBnG462jH1lHnafAgBAWh+TZ25OBi/b6LBHNu6qA+v5vLFjjfS
+A+zSLlsYoBJPTuC/2EB6xBKLLFRmGIBDASDTgnRm538XckU4UJBt99bQ
+=h2nW
 -----END PGP MESSAGE-----
 `
 
@@ -112,25 +122,6 @@ func TestReadEd25519Msg(t *testing.T) {
 }
 
 func TestReadEd25519SignedMsg(t *testing.T) {
-	prompt := func(keys []Key, symmetric bool) ([]byte, error) {
-		if symmetric {
-			t.Errorf("prompt: message was marked as symmetrically encrypted")
-			return nil, errors.ErrKeyIncorrect
-		}
-
-		if len(keys) == 0 {
-			t.Error("prompt: no keys requested")
-			return nil, errors.ErrKeyIncorrect
-		}
-
-		err := keys[0].PrivateKey.Decrypt([]byte("passphrase"))
-		if err != nil {
-			t.Errorf("prompt: error decrypting key: %s", err)
-			return nil, errors.ErrKeyIncorrect
-		}
-
-		return nil, nil
-	}
 	kring := GetKeyMaps()
 	t.Log("Test Decode Signed Message")
 	sig, err := armor.Decode(strings.NewReader(enSignText))
@@ -138,7 +129,7 @@ func TestReadEd25519SignedMsg(t *testing.T) {
 		t.Error(err)
 		return
 	}
-	md, err := ReadMessage(sig.Body, kring, prompt, nil)
+	md, err := ReadMessage(sig.Body, kring, nil, nil)
 	if err != nil {
 		t.Error(err)
 		return
@@ -166,6 +157,21 @@ func BenchmarkDecrypt25519(b *testing.B) {
 	kring := GetKeyMaps()
 	for i := 0; i < b.N; i++ {
 		sig, err := armor.Decode(strings.NewReader(enText))
+		if err != nil {
+			return
+		}
+		md, err := ReadMessage(sig.Body, kring, nil, nil)
+		if err != nil {
+			return
+		}
+		_, err = ioutil.ReadAll(md.UnverifiedBody)
+	}
+}
+
+func BenchmarkVerify25519(b *testing.B) {
+	kring := GetKeyMaps()
+	for i := 0; i < b.N; i++ {
+		sig, err := armor.Decode(strings.NewReader(signText))
 		if err != nil {
 			return
 		}
