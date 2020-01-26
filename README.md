@@ -1,4 +1,4 @@
-# golib
+# openpgp
 [![Build Status](https://travis-ci.org/kjx98/openpgp.svg?branch=master)](
 https://travis-ci.org/kjx98/openpgp)
 

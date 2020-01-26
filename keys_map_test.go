@@ -3,6 +3,7 @@
 package openpgp
 
 import (
+	"bytes"
 	"fmt"
 	"github.com/kjx98/openpgp/armor"
 	"io/ioutil"
@@ -150,6 +151,24 @@ func TestReadEd25519SignedMsg(t *testing.T) {
 	}
 	if md.SignatureError != nil {
 		t.Errorf("failed to validate: %s", md.SignatureError)
+	}
+}
+
+func BenchmarkEncrypt25519(b *testing.B) {
+	kring := GetKeyMaps()
+	var message [32768]byte
+	copy(message[:], []byte("Hello World!\n"))
+	for i := 0; i < b.N; i++ {
+		buf := new(bytes.Buffer)
+		var to *Entity
+		to = kring[eckeyId][0].Entity
+		tos := []*Entity{to}
+		w, err := Encrypt(buf, tos, nil, nil, nil)
+		if err != nil {
+			return
+		}
+		_, err = w.Write(message[:])
+		err = w.Close()
 	}
 }
 

@@ -2,7 +2,7 @@ module github.com/kjx98/openpgp
 
 go 1.11
 
-require golang.org/x/crypto v0.0.0
+require golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2
 
 replace (
 	golang.org/x/crypto => github.com/golang/crypto v0.0.0-20190308221718-c2843e01d9a2
